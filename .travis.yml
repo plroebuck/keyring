@@ -18,7 +18,7 @@ before_install:
   - TGZ="LATEST.tar.gz"
   - curl -O https://download.libsodium.org/libsodium/releases/${TGZ}
   - tar zxf ${TGZ}
-  - cd libsodium
+  - cd libsodium-stable
   - ./configure
   - make && make check
   - sudo make install
