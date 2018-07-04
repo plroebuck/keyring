@@ -13,9 +13,10 @@ r:
 cache: packages
 
 before_install:
-  - LIBNAME="libsodium-stable"
-  - TGZ="${LIBNAME}.tar.gz"
+  - LIBNAME=libsodium-stable
+  - TGZ=${LIBNAME}.tar.gz
   - curl -fLo /tmp/${TGZ} https://download.libsodium.org/libsodium/releases/LATEST.tar.gz
+  - ls -al /tmp
   - tar zxf /tmp/${TGZ}
   - (cd /tmp/${LIBNAME}; ./configure; make && make check && sudo make install)
 
