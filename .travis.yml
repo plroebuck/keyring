@@ -16,8 +16,14 @@ before_install:
   - URL=https://download.libsodium.org/libsodium/releases/LATEST.tar.gz
   - LIBNAME=libsodium-stable
   - TGZ=${LIBNAME}.tar.gz
-  - (cd /tmp; curl -fLo ${TGZ} ${URL} && tar zxf ${TGZ})
-  - (cd /tmp/${LIBNAME}; ./configure; make && make check && sudo make install)
+  - BUILDDIR=${TMPDIR}/${LIBNAME}
+  - (cd ${TMPDIR}; curl -fLo ${TGZ} ${URL} && tar zxf ${TGZ})
+  - rm ${TMPDIR}/${TGZ}
+  - (cd ${BUILDDIR}; ./configure)
+  - (cd ${BUILDDIR}; make)
+  - (cd ${BUILDDIR}; make check)
+  - (cd ${BUILDDIR}; sudo make install)
+  - rm -rf ${BUILDDIR}
 
 addons:
   apt:
