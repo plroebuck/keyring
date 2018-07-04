@@ -27,7 +27,7 @@ before_install:
       #sudo apt-get install -y libsodium-dev
     fi
   - |
-    if [[ "$TRAVIS_OS_NAME" == "linux" ]];
+    if [[ "$TRAVIS_OS_NAME" == "osx" ]];
     then
       echo "macOS $(sw_vers -productVersion)"
     fi
