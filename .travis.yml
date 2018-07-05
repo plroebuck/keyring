@@ -5,12 +5,14 @@
 sudo: true
 dist: trusty
 os:
- - linux
- - osx
+  - linux
+  - osx
 
 language: r
 r:
   - release
+  - devel
+  - oldrel
 
 cache: packages
 
