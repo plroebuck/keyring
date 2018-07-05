@@ -49,7 +49,9 @@ before_install:
         if [ "$?" -ne 0 ];
         then
           ## Force package dependencies to be compiled from source
-          Rscript -e 'devtools::install_deps(type="source", dependencies=TRUE)'
+          echo 'options(pkgType = "source")' >> ~/.Rprofile.site
+        else
+          echo "wtf..."
         fi
       fi
     fi
