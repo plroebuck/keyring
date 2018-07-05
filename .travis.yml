@@ -13,17 +13,22 @@ r:
 cache: packages
 
 before_install:
-  - URL=https://download.libsodium.org/libsodium/releases/LATEST.tar.gz
-  - LIBNAME=libsodium-stable
-  - TGZ=${LIBNAME}.tar.gz
-  - BUILDDIR=${TMPDIR}/${LIBNAME}
-  - (cd ${TMPDIR}; curl -fLo ${TGZ} ${URL} && tar zxf ${TGZ})
-  - rm ${TMPDIR}/${TGZ}
-  - (cd ${BUILDDIR}; ./configure)
-  - (cd ${BUILDDIR}; make)
-  - (cd ${BUILDDIR}; make check)
-  - (cd ${BUILDDIR}; sudo make install)
-  - rm -rf ${BUILDDIR}
+  - |
+    if [[ "$TRAVIS_OS_NAME" == "linux" ]];
+    then
+      URL=https://download.libsodium.org/libsodium/releases/LATEST.tar.gz
+      LIBNAME=libsodium-stable
+      TGZ=${LIBNAME}.tar.gz
+      ${TMPDIR:-/tmp}
+      BUILDDIR=${TMPDIR}/${LIBNAME}
+      (cd ${TMPDIR}; curl -fLo ${TGZ} ${URL} && tar zxf ${TGZ})
+      rm ${TMPDIR}/${TGZ}
+      (cd ${BUILDDIR}; ./configure)
+      (cd ${BUILDDIR}; make)
+      (cd ${BUILDDIR}; make check)
+      (cd ${BUILDDIR}; sudo make install)
+      rm -rf ${BUILDDIR}
+    fi
 
 addons:
   apt:
