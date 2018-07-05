@@ -19,7 +19,7 @@ before_install:
       URL=https://download.libsodium.org/libsodium/releases/LATEST.tar.gz
       LIBNAME=libsodium-stable
       TGZ=${LIBNAME}.tar.gz
-      ${TMPDIR:-/tmp}
+      : ${TMPDIR:-/tmp}
       BUILDDIR=${TMPDIR}/${LIBNAME}
       (cd ${TMPDIR}; curl -fLo ${TGZ} ${URL} && tar zxf ${TGZ})
       rm ${TMPDIR}/${TGZ}
