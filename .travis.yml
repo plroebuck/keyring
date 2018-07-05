@@ -20,6 +20,8 @@ before_install:
   - |
     if [[ "$TRAVIS_OS_NAME" == "linux" ]];
     then
+      ## No APT package exists for libsodium on "trusty" distribution.
+      ## Install it from source
       URL=https://download.libsodium.org/libsodium/releases/LATEST.tar.gz
       LIBNAME=libsodium-stable
       TGZ=${LIBNAME}.tar.gz
@@ -32,6 +34,24 @@ before_install:
       (cd ${BUILDDIR}; make check)
       (cd ${BUILDDIR}; sudo make install)
       rm -rf ${BUILDDIR}
+    fi
+  - |
+    if [[ "$TRAVIS_OS_NAME" == "osx" ]];
+    then
+      ## Let's see the settings
+      R CMD config --all
+
+      if [[ "$TRAVIS_R_VERSION_STRING" == "devrel" ]];
+      then
+        ## Packages aren't built until R release stablizes...
+        URL=https://cloud.r-project.org/bin/macosx/el-capitan/contrib/r-devel/PACKAGES
+        $(curl --head --fail --silent ${URL} 2>/dev/null 1>&2)
+        if [ "$?" -ne 0 ];
+        then
+          ## Force package dependencies to be compiled from source
+          Rscript -e 'devtools::install_deps(type="source", dependencies=TRUE)'
+        fi
+      fi
     fi
 
 addons:
