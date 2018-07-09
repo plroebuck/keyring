@@ -18,6 +18,10 @@ cache: packages
 
 before_install:
   - |
+    echo "Environment:"
+    env
+    echo
+  - |
     if [[ "${TRAVIS_OS_NAME}" == "linux" ]];
     then
       ## No APT package exists for libsodium on "trusty" distribution.
