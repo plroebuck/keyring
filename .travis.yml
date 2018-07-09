@@ -41,6 +41,10 @@ before_install:
       ## Let's see the settings
       R CMD config --all
 
+      echo
+      echo "clang version: $(clang --version)"
+      echo
+
       if [[ "$TRAVIS_R_VERSION_STRING" == "devrel" ]];
       then
         ## Packages aren't built until R release stablizes...
@@ -54,6 +58,10 @@ before_install:
           echo "wtf..."
         fi
       fi
+
+      echo "Site Rprofile:"
+      cat ~/.Rprofile.site
+      echo
     fi
 
 addons:
