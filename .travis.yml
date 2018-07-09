@@ -45,7 +45,7 @@ before_install:
       Rscript -e 'cat(tools::makevars_site())'
       echo
 
-: ${R_HOME:=$(Rscript -e 'R.home()')}
+      : ${R_HOME:=$(Rscript -e 'R.home()')}
 
       ## Let's see the settings
       R CMD config --all
@@ -63,15 +63,14 @@ before_install:
         then
           ## Force package dependencies to be compiled from source
           sudo echo 'options(pkgType = "source")' >> ${R_PROFILE}
-~/.Rprofile.site
         fi
       fi
 
       echo "Rprofile.site:"
-      cat ${R_PROFILE}
+      test -r "${R_PROFILE}" && cat "${R_PROFILE}"
       echo
       echo "Rprofile:"
-      cat ${R_PROFILE_USER}
+      test -r "${R_PROFILE_USER}" && cat "${R_PROFILE_USER}"
       echo
     fi
 
