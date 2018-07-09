@@ -41,12 +41,14 @@ before_install:
   - |
     if [[ "${TRAVIS_OS_NAME}" == "osx" ]];
     then
-      ## Let's see the settings
-      R CMD config --all
-
-      echo
       echo "Makevars.site:"
       Rscript -e 'cat(tools::makevars_site())'
+      echo
+
+: ${R_HOME:=$(Rscript -e 'R.home()')}
+
+      ## Let's see the settings
+      R CMD config --all
       echo
 
       echo "clang version: $(clang --version)"
@@ -60,12 +62,16 @@ before_install:
         if [ "$?" -ne 0 ];
         then
           ## Force package dependencies to be compiled from source
-          echo 'options(pkgType = "source")' >> ~/.Rprofile.site
+          sudo echo 'options(pkgType = "source")' >> ${R_PROFILE}
+~/.Rprofile.site
         fi
       fi
 
-      echo "Site Rprofile:"
-      cat ~/.Rprofile.site
+      echo "Rprofile.site:"
+      cat ${R_PROFILE}
+      echo
+      echo "Rprofile:"
+      cat ${R_PROFILE_USER}
       echo
     fi
 
