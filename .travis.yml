@@ -42,6 +42,10 @@ before_install:
       R CMD config --all
 
       echo
+      echo "Makevars.site:"
+      cat(tools::makevars_site())
+      echo
+
       echo "clang version: $(clang --version)"
       echo
 
