@@ -19,7 +19,7 @@ cache: packages
 before_install:
   - |
     echo "Environment:"
-    env
+    env | sort
     echo
   - |
     if [[ "${TRAVIS_OS_NAME}" == "linux" ]];
@@ -31,8 +31,7 @@ before_install:
       TGZ=${LIBNAME}.tar.gz
       : ${TMPDIR:=/tmp}
       BUILDDIR=${TMPDIR}/${LIBNAME}
-      (cd ${TMPDIR}; curl -fLo ${TGZ} ${URL} && tar zxf ${TGZ})
-      rm ${TMPDIR}/${TGZ}
+      (cd ${TMPDIR}; curl -fLo ${TGZ} ${URL} && tar zxf ${TGZ} && rm ${TGZ})
       (cd ${BUILDDIR}; ./configure)
       (cd ${BUILDDIR}; make)
       (cd ${BUILDDIR}; make check)
@@ -53,14 +52,11 @@ before_install:
       echo "clang version: $(clang --version)"
       echo
 
-      echo "\$TRAVIS_R_VERSION_STRING: ${TRAVIS_R_VERSION_STRING}"
-      echo
-
       if [[ "${TRAVIS_R_VERSION_STRING}" == "devel" ]];
       then
         ## Packages aren't built until R release stablizes...
         URL=https://cloud.r-project.org/bin/macosx/el-capitan/contrib/r-devel/PACKAGES
-        $(curl --head --fail --silent ${URL} 2>/dev/null 1>&2)
+        $(curl --head --fail --silent ${URL} > /dev/null 2>&1)
         if [ "$?" -ne 0 ];
         then
           ## Force package dependencies to be compiled from source
