@@ -43,7 +43,7 @@ before_install:
 
       echo
       echo "Makevars.site:"
-      cat(tools::makevars_site())
+      Rscript -e 'cat(tools::makevars_site())'
       echo
 
       echo "clang version: $(clang --version)"
