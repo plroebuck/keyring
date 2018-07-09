@@ -18,7 +18,7 @@ cache: packages
 
 before_install:
   - |
-    if [[ "$TRAVIS_OS_NAME" == "linux" ]];
+    if [[ "${TRAVIS_OS_NAME}" == "linux" ]];
     then
       ## No APT package exists for libsodium on "trusty" distribution.
       ## Install it from source
@@ -36,7 +36,7 @@ before_install:
       rm -rf ${BUILDDIR}
     fi
   - |
-    if [[ "$TRAVIS_OS_NAME" == "osx" ]];
+    if [[ "${TRAVIS_OS_NAME}" == "osx" ]];
     then
       ## Let's see the settings
       R CMD config --all
@@ -45,7 +45,10 @@ before_install:
       echo "clang version: $(clang --version)"
       echo
 
-      if [[ "$TRAVIS_R_VERSION_STRING" == "devrel" ]];
+      echo "\$TRAVIS_R_VERSION_STRING: ${TRAVIS_R_VERSION_STRING}"
+      echo
+
+      if [[ "${TRAVIS_R_VERSION_STRING}" == "devel" ]];
       then
         ## Packages aren't built until R release stablizes...
         URL=https://cloud.r-project.org/bin/macosx/el-capitan/contrib/r-devel/PACKAGES
@@ -54,8 +57,6 @@ before_install:
         then
           ## Force package dependencies to be compiled from source
           echo 'options(pkgType = "source")' >> ~/.Rprofile.site
-        else
-          echo "wtf..."
         fi
       fi
 
@@ -70,5 +71,5 @@ addons:
       - libsecret-1-dev
 
 after_success:
-  - test "$TRAVIS_R_VERSION_STRING" = "release" && Rscript -e 'covr::codecov()'
+  - test "${TRAVIS_R_VERSION_STRING}" = "release" && Rscript -e 'covr::codecov()'
 
