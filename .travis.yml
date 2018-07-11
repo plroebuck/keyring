@@ -24,19 +24,30 @@ before_install:
   - |
     if [[ "${TRAVIS_OS_NAME}" == "linux" ]];
     then
-      ## No APT package exists for libsodium on "trusty" distribution.
-      ## Install it from source
-      URL=https://download.libsodium.org/libsodium/releases/LATEST.tar.gz
-      LIBNAME=libsodium-stable
-      TGZ=${LIBNAME}.tar.gz
-      : ${TMPDIR:=/tmp}
-      BUILDDIR=${TMPDIR}/${LIBNAME}
-      (cd ${TMPDIR}; curl -fLo ${TGZ} ${URL} && tar zxf ${TGZ} && rm ${TGZ})
-      (cd ${BUILDDIR}; ./configure)
-      (cd ${BUILDDIR}; make)
-      (cd ${BUILDDIR}; make check)
-      (cd ${BUILDDIR}; sudo make install)
-      rm -rf ${BUILDDIR}
+      echo "pkg-config --list-all (early):"
+      pkg-config --list-all
+      echo
+      echo "pkg-config libsodium: $(pkg-config --exists libsodium)"
+      if [[ "$(pkg-config --exists libsodium)" -ne 0 ]];
+      then
+        ## No APT package exists for libsodium on Ubuntu "trusty" release.
+        ## Install from source.
+        URL=https://download.libsodium.org/libsodium/releases/LATEST.tar.gz
+        LIBNAME=libsodium-stable
+        TGZ=${LIBNAME}.tar.gz
+        : ${TMPDIR:=/tmp}
+        BUILDDIR=${TMPDIR}/${LIBNAME}
+        (cd ${TMPDIR}; curl -fLo ${TGZ} ${URL} && tar zxf ${TGZ} && rm ${TGZ})
+        (cd ${BUILDDIR}; ./configure)
+        (cd ${BUILDDIR}; make)
+        (cd ${BUILDDIR}; make check)
+        (cd ${BUILDDIR}; sudo make install)
+        rm -rf ${BUILDDIR}
+      fi
+      echo
+      echo "pkg-config --list-all (late):"
+      pkg-config --list-all
+      echo
     fi
   - |
     if [[ "${TRAVIS_OS_NAME}" == "osx" ]];
@@ -68,9 +79,6 @@ before_install:
 
       echo "Rprofile.site:"
       test -r "${R_PROFILE}" && cat "${R_PROFILE}"
-      echo
-      echo "Rprofile:"
-      test -r "${R_PROFILE_USER}" && cat "${R_PROFILE_USER}"
       echo
     fi
 
