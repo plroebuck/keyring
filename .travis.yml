@@ -28,7 +28,8 @@ before_install:
       #echo
       echo "pkg-config libsodium: $(pkg-config --exists libsodium; echo $?)"
       pkg-config --exists libsodium
-      if [[ $? -ne 0 ]];
+      
+      if ! pkg-config --exists libsodium;
       then
         ## No APT package exists for libsodium on Ubuntu "trusty" release.
         ## Install from source.
@@ -47,9 +48,9 @@ before_install:
       echo
       echo "pkg-config libsodium: $(pkg-config --exists libsodium; echo $?)"
       echo
-      echo "pkg-config --list-all (late):"
-      pkg-config --list-all | LC_COLLATE=C sort
-      echo
+      #echo "pkg-config --list-all (late):"
+      #pkg-config --list-all | LC_COLLATE=C sort
+      #echo
     fi
   - |
     if [[ "${TRAVIS_OS_NAME}" == "osx" ]];
