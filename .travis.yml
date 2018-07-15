@@ -24,11 +24,11 @@ before_install:
   - |
     if [[ "${TRAVIS_OS_NAME}" == "linux" ]];
     then
-      echo "pkg-config --list-all (early):"
-      pkg-config --list-all
+      echo "pkg-config grep libsodium*:"
+      pkg-config --list-all | grep [sS]odium
       echo
-      echo "pkg-config libsodium: $(pkg-config --exists libsodium)"
-      if [[ "$(pkg-config --exists libsodium)" -ne 0 ]];
+      echo "pkg-config libsodium: $(pkg-config --exists libsodium; echo $?)"
+      if [[ $(pkg-config --exists libsodium) -ne 0 ]];
       then
         ## No APT package exists for libsodium on Ubuntu "trusty" release.
         ## Install from source.
@@ -44,9 +44,10 @@ before_install:
         (cd ${BUILDDIR}; sudo make install)
         rm -rf ${BUILDDIR}
       fi
+      echo "pkg-config libsodium: $(pkg-config --exists libsodium; echo $?)"
       echo
       echo "pkg-config --list-all (late):"
-      pkg-config --list-all
+      pkg-config --list-all | sort
       echo
     fi
   - |
@@ -86,6 +87,7 @@ addons:
   apt:
     packages:
       - libsecret-1-dev
+      - pkg-config
 
 after_success:
   - test "${TRAVIS_R_VERSION_STRING}" = "release" && Rscript -e 'covr::codecov()'
