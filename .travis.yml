@@ -6,13 +6,13 @@ sudo: true
 dist: trusty
 os:
   - linux
-  - osx
+#  - osx
 
 language: r
 r:
   - release
-  - devel
-  - oldrel
+#  - devel
+#  - oldrel
 
 cache: packages
 
