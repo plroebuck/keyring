@@ -43,10 +43,12 @@ before_install:
         (cd ${BUILDDIR}; ./configure)
         (cd ${BUILDDIR}; make)
         (cd ${BUILDDIR}; make check)
-        INSTALL_LOG=${TMPDIR}/libsodium.log
+        export INSTALL_LOG=${TMPDIR}/libsodium.log
+        echo "INSTALL_LOG: ${INSTALL_LOG}"
         (cd ${BUILDDIR}; sudo make install > ${INSTALL_LOG} 2>&1)
         rm -rf ${BUILDDIR}
       fi
+      echo "INSTALL_LOG: ${INSTALL_LOG}"
       echo "Install Log:"
       cat ${INSTALL_LOG}
       echo
