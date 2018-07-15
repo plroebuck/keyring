@@ -24,14 +24,11 @@ before_install:
   - |
     if [[ "${TRAVIS_OS_NAME}" == "linux" ]];
     then
-      echo "pkg-config grep libsodium*:"
-      pkg-config --list-all | grep [sS]odium
-      echo
-      PKG_CONFIG_DEBUG_SPEW=1 pkg-config --version
-      echo
+      #PKG_CONFIG_DEBUG_SPEW=1 pkg-config --version
+      #echo
       echo "pkg-config libsodium: $(pkg-config --exists libsodium; echo $?)"
-      #if [[ $(pkg-config --exists libsodium) -ne 0 ]];
-      if [[ true ]];
+      pkg-config --exists libsodium
+      if [[ $? -ne 0 ]];
       then
         ## No APT package exists for libsodium on Ubuntu "trusty" release.
         ## Install from source.
@@ -44,13 +41,9 @@ before_install:
         (cd ${BUILDDIR}; ./configure)
         (cd ${BUILDDIR}; make)
         (cd ${BUILDDIR}; make check)
-        INSTALL_LOG=${TMPDIR}/libsodium.log
-        echo "INSTALL_LOG: ${INSTALL_LOG}"
-        (cd ${BUILDDIR}; sudo make install > ${INSTALL_LOG} 2>&1)
+        (cd ${BUILDDIR}; sudo make install)
         rm -rf ${BUILDDIR}
       fi
-      echo "INSTALL_LOG: ${INSTALL_LOG}"
-      cat ${INSTALL_LOG}
       echo
       echo "pkg-config libsodium: $(pkg-config --exists libsodium; echo $?)"
       echo
