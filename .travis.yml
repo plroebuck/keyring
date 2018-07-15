@@ -43,9 +43,13 @@ before_install:
         (cd ${BUILDDIR}; ./configure)
         (cd ${BUILDDIR}; make)
         (cd ${BUILDDIR}; make check)
-        (cd ${BUILDDIR}; sudo make install)
+        INSTALL_LOG=${TMPDIR}/libsodium.log
+        (cd ${BUILDDIR}; sudo make install > ${INSTALL_LOG} 2>&1)
         rm -rf ${BUILDDIR}
       fi
+      echo "Install Log:"
+      cat ${INSTALL_LOG}
+      echo
       echo "pkg-config libsodium: $(pkg-config --exists libsodium; echo $?)"
       echo
       echo "pkg-config --list-all (late):"
