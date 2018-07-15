@@ -27,6 +27,8 @@ before_install:
       echo "pkg-config grep libsodium*:"
       pkg-config --list-all | grep [sS]odium
       echo
+      PKG_CONFIG_DEBUG_SPEW=1 pkg-config --version
+      echo
       echo "pkg-config libsodium: $(pkg-config --exists libsodium; echo $?)"
       if [[ $(pkg-config --exists libsodium) -ne 0 ]];
       then
@@ -47,7 +49,7 @@ before_install:
       echo "pkg-config libsodium: $(pkg-config --exists libsodium; echo $?)"
       echo
       echo "pkg-config --list-all (late):"
-      pkg-config --list-all | sort
+      pkg-config --list-all | LC_COLLATE=C sort
       echo
     fi
   - |
