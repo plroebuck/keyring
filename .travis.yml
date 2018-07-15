@@ -30,7 +30,8 @@ before_install:
       PKG_CONFIG_DEBUG_SPEW=1 pkg-config --version
       echo
       echo "pkg-config libsodium: $(pkg-config --exists libsodium; echo $?)"
-      if [[ $(pkg-config --exists libsodium) -ne 0 ]];
+      #if [[ $(pkg-config --exists libsodium) -ne 0 ]];
+      if 1;
       then
         ## No APT package exists for libsodium on Ubuntu "trusty" release.
         ## Install from source.
@@ -43,7 +44,7 @@ before_install:
         (cd ${BUILDDIR}; ./configure)
         (cd ${BUILDDIR}; make)
         (cd ${BUILDDIR}; make check)
-        export INSTALL_LOG=${TMPDIR}/libsodium.log
+        INSTALL_LOG=${TMPDIR}/libsodium.log
         echo "INSTALL_LOG: ${INSTALL_LOG}"
         (cd ${BUILDDIR}; sudo make install > ${INSTALL_LOG} 2>&1)
         rm -rf ${BUILDDIR}
